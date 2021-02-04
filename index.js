@@ -23,7 +23,7 @@ function MapboxLanguage(options) {
   this._defaultLanguage = options.defaultLanguage;
   this._isLanguageField = options.languageField || /^\{name/;
   this._getLanguageField = options.getLanguageField || function nameField(language) {
-    return language === 'mul' ? '{name}' : '{name_' + language + '}';
+    return language === 'mul' ? '{name}' : '{name:' + language + '}';
   };
   this._languageSource = options.languageSource || null;
   this._languageTransform = options.languageTransform || function (style, language) {
@@ -34,7 +34,7 @@ function MapboxLanguage(options) {
     }
   };
   this._excludedLayerIds = options.excludedLayerIds || [];
-  this.supportedLanguages = options.supportedLanguages || ['ar', 'en', 'es', 'fr', 'de', 'ja', 'ko', 'mul', 'pt', 'ru', 'zh'];
+  this.supportedLanguages = options.supportedLanguages || ['ar', 'en', 'es', 'fr', 'de', 'ja', 'ko', 'mul', 'pt', 'ru', 'zh','eu'];
 }
 
 function standardSpacing(style) {
@@ -153,7 +153,7 @@ function changeLayerTextProperty(isLangField, layer, languageFieldName, excluded
 function findStreetsSource(style) {
   var sources = Object.keys(style.sources).filter(function (sourceName) {
     var source = style.sources[sourceName];
-    return /mapbox-streets-v\d/.test(source.url);
+    return (/mapbox-streets-v\d/.test(source.url)|| /teritorio-latest.json/.test(source.url));
   });
   return sources[0];
 }
